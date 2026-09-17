@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ModelIA</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#050816,#0f172a,#1e1b4b);
+    color:white;
+    padding:20px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo h1{
+    font-size:48px;
+    color:#60a5fa;
+}
+
+.logo p{
+    color:#94a3b8;
+    margin-top:10px;
+}
+
+.card{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:20px;
+    margin-top:20px;
+}
+
+.card h2{
+    color:#60a5fa;
+    margin-bottom:15px;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    border:none;
+    border-radius:12px;
+    background:#111827;
+    color:white;
+}
+
+textarea{
+    height:150px;
+    resize:none;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+}
+
+.criar{
+    background:#2563eb;
+}
+
+.gerar{
+    background:#7c3aed;
+}
+
+.sair{
+    background:#ef4444;
+}
+
+.preview{
+    width:100%;
+    margin-top:15px;
+    border-radius:12px;
+    display:none;
+}
+
+.resultado{
+    margin-top:15px;
+    padding:15px;
+    border-radius:12px;
+    background:#111827;
+}
+
+.projeto{
+    background:#111827;
+    padding:12px;
+    border-radius:12px;
+    margin-top:10px;
+}
+
+.status{
+    text-align:center;
+    margin-top:10px;
+    color:#22c55e;
+    font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="login">
+
+    <div class="logo">
+
+        <h1>ModelIA</h1>
+
+        <p>
+            Crie modelos 3D usando IA
+        </p>
+
+        <div class="status">
+            ● Backend conectado
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Criar Conta</h2>
+
+        <input
+            id="email"
+            type="email"
+            placeholder="Seu email"
+        >
+
+        <input
+            id="senha"
+            type="password"
+            placeholder="Sua senha"
+        >
+
+        <button
+            class="criar"
+            onclick="criarConta()"
+        >
+            Criar Conta
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- APLICATIVO -->
+
+<div
+    id="app"
+    style="display:none;"
+>
+
+    <div class="logo">
+
+        <h1>ModelIA</h1>
+
+        <p id="usuario"></p>
+
+    </div>
+
+
+    <!-- IMAGEM -->
+
+    <div class="card">
+
+        <h2>
+            Imagem de Referência
+        </h2>
+
+        <input
+            id="imagem"
+            type="file"
+            accept="image/*"
+            onchange="mostrarImagem(event)"
+        >
+
+        <img
+            id="preview"
+            class="preview"
+        >
+
+    </div>
+
+
+    <!-- DESCRIÇÃO -->
+
+    <div class="card">
+
+        <h2>
+            Descreva o Modelo
+        </h2>
+
+        <textarea
+            id="descricao"
+            placeholder="Ex: Pinheiro gigante e sombrio"
+        ></textarea>
+
+        <button
+            class="gerar"
+            onclick="gerarModelo()"
+        >
+            🤖 Gerar Modelo
+        </button>
+
+        <div
+            id="resultado"
+            class="resultado"
+        >
+            Aguardando descrição...
+        </div>
+
+    </div>
+
+
+    <!-- HISTÓRICO -->
+
+    <div class="card">
+
+        <h2>
+            Projetos Recentes
+        </h2>
+
+        <div id="historico"></div>
+
+    </div>
+
+
+    <!-- SAIR -->
+
+    <div class="card">
+
+        <button
+            class="sair"
+            onclick="sair()"
+        >
+            Sair
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   ENDEREÇO DO BACKEND
+===================================== */
+
+const API_URL =
+"https://modelia-backend.onrender.com";
+
+
+/* =====================================
+   HISTÓRICO
+===================================== */
+
+let historico = [];
+
+
+/* =====================================
+   CRIAR CONTA
+===================================== */
+
+function criarConta(){
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const senha =
+        document.getElementById("senha").value.trim();
+
+    if(email === "" || senha === ""){
+
+        alert(
+            "Preencha email e senha."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "usuario"
+    ).innerText =
+        "Conta: " + email;
+
+    document.getElementById(
+        "login"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "app"
+    ).style.display =
+        "block";
+}
+
+
+/* =====================================
+   SAIR
+===================================== */
+
+function sair(){
+
+    document.getElementById(
+        "app"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "login"
+    ).style.display =
+        "block";
+}
+
+
+/* =====================================
+   IMAGEM
+===================================== */
+
+function mostrarImagem(event){
+
+    const arquivo =
+        event.target.files[0];
+
+    if(!arquivo){
+        return;
+    }
+
+    const preview =
+        document.getElementById(
+            "preview"
+        );
+
+    preview.src =
+        URL.createObjectURL(
+            arquivo
+        );
+
+    preview.style.display =
+        "block";
+}
+
+
+/* =====================================
+   GERAR MODELO
+===================================== */
+
+async function gerarModelo(){
+
+    const descricao =
+        document.getElementById(
+            "descricao"
+        ).value.trim();
+
+    const resultado =
+        document.getElementById(
+            "resultado"
+        );
+
+    if(descricao === ""){
+
+        alert(
+            "Digite uma descrição."
+        );
+
+        return;
+    }
+
+
+    resultado.innerHTML =
+        "🤖 Conectando ao ModelIA...";
+
+
+    try{
+
+        const resposta =
+            await fetch(
+                API_URL + "/api/generate",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        descricao:descricao
+                    })
+                }
+            );
+
+
+        if(!resposta.ok){
+
+            throw new Error(
+                "Erro HTTP: " +
+                resposta.status
+            );
+        }
+
+
+        const dados =
+            await resposta.json();
+
+
+        resultado.innerHTML =
+            "🤖 <strong>ModelIA:</strong><br><br>" +
+            (
+                dados.resultado ||
+                dados.mensagem ||
+                "Modelo processado."
+            );
+
+
+        historico.push(
+            descricao
+        );
+
+        atualizarHistorico();
+
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+        resultado.innerHTML =
+            "❌ Erro ao conectar com o backend.";
+
+    }
+
+}
+
+
+/* =====================================
+   HISTÓRICO
+===================================== */
+
+function atualizarHistorico(){
+
+    const area =
+        document.getElementById(
+            "historico"
+        );
+
+    area.innerHTML = "";
+
+
+    historico.forEach(
+        function(item){
+
+            area.innerHTML +=
+                "<div class='projeto'>" +
+                item +
+                "</div>";
+
+        }
+    );
+
+}
+
+</script>
+
+</body>
+  </html>
