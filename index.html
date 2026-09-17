@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>ModelIA</title>
 
@@ -17,7 +23,13 @@
 
 body{
     min-height:100vh;
-    background:linear-gradient(135deg,#050816,#0f172a,#1e1b4b);
+    background:
+        linear-gradient(
+            135deg,
+            #050816,
+            #0f172a,
+            #1e1b4b
+        );
     color:white;
     padding:20px;
 }
@@ -84,6 +96,11 @@ button{
     cursor:pointer;
 }
 
+button:disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+}
+
 .criar{
     background:#2563eb;
 }
@@ -94,6 +111,19 @@ button{
 
 .sair{
     background:#ef4444;
+}
+
+.download{
+    display:block;
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border-radius:12px;
+    background:#16a34a;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
 }
 
 .preview{
@@ -108,6 +138,7 @@ button{
     padding:15px;
     border-radius:12px;
     background:#111827;
+    line-height:1.6;
 }
 
 .projeto{
@@ -124,14 +155,36 @@ button{
     font-size:14px;
 }
 
+.barra{
+    width:100%;
+    height:10px;
+    background:#374151;
+    border-radius:10px;
+    margin-top:15px;
+    overflow:hidden;
+}
+
+.progresso{
+    height:100%;
+    width:0%;
+    background:#7c3aed;
+    transition:width 0.5s;
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-<!-- LOGIN -->
+
+<!-- ======================================
+     LOGIN
+======================================= -->
 
 <div id="login">
 
@@ -149,9 +202,11 @@ button{
 
     </div>
 
+
     <div class="card">
 
         <h2>Criar Conta</h2>
+
 
         <input
             id="email"
@@ -159,17 +214,21 @@ button{
             placeholder="Seu email"
         >
 
+
         <input
             id="senha"
             type="password"
             placeholder="Sua senha"
         >
 
+
         <button
             class="criar"
             onclick="criarConta()"
         >
+
             Criar Conta
+
         </button>
 
     </div>
@@ -177,12 +236,16 @@ button{
 </div>
 
 
-<!-- APLICATIVO -->
+
+<!-- ======================================
+     APLICATIVO
+======================================= -->
 
 <div
     id="app"
     style="display:none;"
 >
+
 
     <div class="logo">
 
@@ -193,7 +256,10 @@ button{
     </div>
 
 
-    <!-- IMAGEM -->
+
+    <!-- ==================================
+         IMAGEM
+    =================================== -->
 
     <div class="card">
 
@@ -201,12 +267,14 @@ button{
             Imagem de Referência
         </h2>
 
+
         <input
             id="imagem"
             type="file"
             accept="image/*"
             onchange="mostrarImagem(event)"
         >
+
 
         <img
             id="preview"
@@ -216,37 +284,68 @@ button{
     </div>
 
 
-    <!-- DESCRIÇÃO -->
+
+    <!-- ==================================
+         DESCRIÇÃO
+    =================================== -->
 
     <div class="card">
 
         <h2>
-            Descreva o Modelo
+            Descreva o Modelo 3D
         </h2>
+
 
         <textarea
             id="descricao"
-            placeholder="Ex: Pinheiro gigante e sombrio"
+            placeholder="Ex: Pinheiro gigante, velho, sombrio e grotesco"
         ></textarea>
 
+
         <button
+            id="botaoGerar"
             class="gerar"
             onclick="gerarModelo()"
         >
-            🤖 Gerar Modelo
+
+            🤖 Gerar Modelo 3D
+
         </button>
+
 
         <div
             id="resultado"
             class="resultado"
         >
+
             Aguardando descrição...
+
+        </div>
+
+
+        <div
+            id="barraContainer"
+            style="display:none;"
+        >
+
+            <div class="barra">
+
+                <div
+                    id="progresso"
+                    class="progresso"
+                ></div>
+
+            </div>
+
         </div>
 
     </div>
 
 
-    <!-- HISTÓRICO -->
+
+    <!-- ==================================
+         HISTÓRICO
+    =================================== -->
 
     <div class="card">
 
@@ -254,12 +353,16 @@ button{
             Projetos Recentes
         </h2>
 
+
         <div id="historico"></div>
 
     </div>
 
 
-    <!-- SAIR -->
+
+    <!-- ==================================
+         SAIR
+    =================================== -->
 
     <div class="card">
 
@@ -267,46 +370,62 @@ button{
             class="sair"
             onclick="sair()"
         >
+
             Sair
+
         </button>
 
     </div>
 
 </div>
 
+
 </div>
+
 
 
 <script>
 
-/* =====================================
+
+/* =========================================
    ENDEREÇO DO BACKEND
-===================================== */
+========================================= */
 
 const API_URL =
-"https://modelia-backend.onrender.com";
+    "https://modelia-backend.onrender.com";
 
 
-/* =====================================
+/* =========================================
    HISTÓRICO
-===================================== */
+========================================= */
 
 let historico = [];
 
 
-/* =====================================
+/* =========================================
    CRIAR CONTA
-===================================== */
+========================================= */
 
 function criarConta(){
 
     const email =
-        document.getElementById("email").value.trim();
+        document
+        .getElementById("email")
+        .value
+        .trim();
+
 
     const senha =
-        document.getElementById("senha").value.trim();
+        document
+        .getElementById("senha")
+        .value
+        .trim();
 
-    if(email === "" || senha === ""){
+
+    if(
+        email === "" ||
+        senha === ""
+    ){
 
         alert(
             "Preencha email e senha."
@@ -315,183 +434,675 @@ function criarConta(){
         return;
     }
 
-    document.getElementById(
-        "usuario"
-    ).innerText =
+
+    document
+        .getElementById("usuario")
+        .innerText =
         "Conta: " + email;
 
-    document.getElementById(
-        "login"
-    ).style.display =
+
+    document
+        .getElementById("login")
+        .style.display =
         "none";
 
-    document.getElementById(
-        "app"
-    ).style.display =
+
+    document
+        .getElementById("app")
+        .style.display =
         "block";
+
 }
 
 
-/* =====================================
+
+/* =========================================
    SAIR
-===================================== */
+========================================= */
 
 function sair(){
 
-    document.getElementById(
-        "app"
-    ).style.display =
+    document
+        .getElementById("app")
+        .style.display =
         "none";
 
-    document.getElementById(
-        "login"
-    ).style.display =
+
+    document
+        .getElementById("login")
+        .style.display =
         "block";
+
 }
 
 
-/* =====================================
-   IMAGEM
-===================================== */
+
+/* =========================================
+   MOSTRAR IMAGEM
+========================================= */
 
 function mostrarImagem(event){
 
     const arquivo =
         event.target.files[0];
 
+
     if(!arquivo){
+
         return;
+
     }
 
+
     const preview =
-        document.getElementById(
-            "preview"
-        );
+        document
+        .getElementById("preview");
+
 
     preview.src =
         URL.createObjectURL(
             arquivo
         );
 
+
     preview.style.display =
         "block";
+
 }
 
 
-/* =====================================
+
+/* =========================================
    GERAR MODELO
-===================================== */
+========================================= */
 
 async function gerarModelo(){
 
     const descricao =
-        document.getElementById(
-            "descricao"
-        ).value.trim();
+        document
+        .getElementById("descricao")
+        .value
+        .trim();
+
 
     const resultado =
-        document.getElementById(
-            "resultado"
-        );
+        document
+        .getElementById("resultado");
+
+
+    const botao =
+        document
+        .getElementById("botaoGerar");
+
+
+    const barraContainer =
+        document
+        .getElementById("barraContainer");
+
+
+    const progresso =
+        document
+        .getElementById("progresso");
+
 
     if(descricao === ""){
 
         alert(
-            "Digite uma descrição."
+            "Digite uma descrição para o modelo."
         );
 
         return;
+
     }
 
 
+    /*
+        Bloqueia o botão
+    */
+
+    botao.disabled =
+        true;
+
+
+    botao.innerText =
+        "⏳ Gerando modelo...";
+
+
     resultado.innerHTML =
-        "🤖 Conectando ao ModelIA...";
+        "🤖 Enviando descrição para o ModelIA...";
+
+
+    barraContainer.style.display =
+        "block";
+
+
+    progresso.style.width =
+        "5%";
 
 
     try{
 
+
+        /* =================================
+           ENVIAR PARA O BACKEND
+        ================================= */
+
         const resposta =
             await fetch(
-                API_URL + "/api/generate",
+                API_URL +
+                "/api/generate",
                 {
+
                     method:"POST",
 
                     headers:{
                         "Content-Type":
-                        "application/json"
+                            "application/json"
                     },
 
                     body:JSON.stringify({
-                        descricao:descricao
+
+                        descricao:
+                            descricao
+
                     })
+
                 }
             );
-
-
-        if(!resposta.ok){
-
-            throw new Error(
-                "Erro HTTP: " +
-                resposta.status
-            );
-        }
 
 
         const dados =
             await resposta.json();
 
 
-        resultado.innerHTML =
-            "🤖 <strong>ModelIA:</strong><br><br>" +
-            (
-                dados.resultado ||
+        if(
+            !resposta.ok ||
+            !dados.task_id
+        ){
+
+            throw new Error(
                 dados.mensagem ||
-                "Modelo processado."
+                "Não foi possível criar a tarefa."
             );
 
+        }
 
-        historico.push(
+
+        /*
+            Tarefa criada
+        */
+
+        resultado.innerHTML =
+            "🤖 Modelo enviado para geração.<br><br>" +
+            "⏳ Aguarde enquanto a IA cria seu modelo 3D...";
+
+
+        progresso.style.width =
+            "10%";
+
+
+        /*
+            Começar acompanhamento
+        */
+
+        await acompanharTarefa(
+            dados.task_id,
             descricao
         );
 
-        atualizarHistorico();
 
-
-    }catch(erro){
+    }
+    catch(erro){
 
         console.error(
             erro
         );
 
+
         resultado.innerHTML =
-            "❌ Erro ao conectar com o backend.";
+            "❌ Erro:<br><br>" +
+            erro.message;
+
+
+        botao.disabled =
+            false;
+
+
+        botao.innerText =
+            "🤖 Gerar Modelo 3D";
 
     }
 
 }
 
 
-/* =====================================
+
+/* =========================================
+   ACOMPANHAR TAREFA
+========================================= */
+
+async function acompanharTarefa(
+    taskId,
+    descricao
+){
+
+    const resultado =
+        document
+        .getElementById("resultado");
+
+
+    const botao =
+        document
+        .getElementById("botaoGerar");
+
+
+    const progresso =
+        document
+        .getElementById("progresso");
+
+
+    /*
+        Limite de tentativas
+    */
+
+    const maxTentativas =
+        120;
+
+
+    for(
+        let tentativa = 0;
+        tentativa < maxTentativas;
+        tentativa++
+    ){
+
+        try{
+
+
+            /*
+                Esperar 5 segundos
+            */
+
+            await esperar(
+                5000
+            );
+
+
+            /*
+                Consultar backend
+            */
+
+            const resposta =
+                await fetch(
+
+                    API_URL +
+                    "/api/task/" +
+                    encodeURIComponent(
+                        taskId
+                    )
+
+                );
+
+
+            const dados =
+                await resposta.json();
+
+
+            if(!resposta.ok){
+
+                throw new Error(
+                    dados.mensagem ||
+                    "Erro ao consultar tarefa."
+                );
+
+            }
+
+
+            /*
+                Progresso
+            */
+
+            let porcentagem =
+                Number(
+                    dados.progress
+                ) || 0;
+
+
+            if(porcentagem > 0){
+
+                progresso.style.width =
+                    Math.min(
+                        porcentagem,
+                        100
+                    ) + "%";
+
+            }
+
+
+            /*
+                STATUS
+            */
+
+            if(
+                dados.status ===
+                "queued"
+            ){
+
+                resultado.innerHTML =
+                    "⏳ Na fila para geração...";
+
+            }
+
+
+            else if(
+                dados.status ===
+                "running"
+            ){
+
+                resultado.innerHTML =
+                    "🤖 A IA está criando seu modelo 3D...<br><br>" +
+                    "Progresso: " +
+                    porcentagem +
+                    "%";
+
+            }
+
+
+            /*
+                FINALIZADO
+            */
+
+            else if(
+                dados.status ===
+                "success"
+            ){
+
+                progresso.style.width =
+                    "100%";
+
+
+                resultado.innerHTML =
+                    "🎉 <strong>Modelo 3D criado!</strong><br><br>" +
+                    "Seu modelo foi gerado com sucesso.";
+
+
+                /*
+                    Procurar URL do modelo
+                */
+
+                const url =
+                    encontrarUrl(
+                        dados.output
+                    );
+
+
+                if(url){
+
+                    const link =
+                        document.createElement(
+                            "a"
+                        );
+
+
+                    link.href =
+                        url;
+
+
+                    link.target =
+                        "_blank";
+
+
+                    link.rel =
+                        "noopener";
+
+
+                    link.className =
+                        "download";
+
+
+                    link.innerText =
+                        "⬇️ Abrir / Baixar Modelo 3D";
+
+
+                    resultado.appendChild(
+                        link
+                    );
+
+                }
+                else{
+
+                    resultado.innerHTML +=
+                        "<br><br>" +
+                        "Modelo criado, mas o endereço do arquivo não foi encontrado na resposta.";
+
+                }
+
+
+                /*
+                    Histórico
+                */
+
+                historico.push(
+                    descricao
+                );
+
+
+                atualizarHistorico();
+
+
+                botao.disabled =
+                    false;
+
+
+                botao.innerText =
+                    "🤖 Gerar Modelo 3D";
+
+
+                return;
+
+            }
+
+
+            /*
+                FALHA
+            */
+
+            else if(
+                dados.status ===
+                "failed"
+            ){
+
+                throw new Error(
+                    "O Tripo não conseguiu gerar o modelo."
+                );
+
+            }
+
+        }
+        catch(erro){
+
+            console.error(
+                erro
+            );
+
+
+            resultado.innerHTML =
+                "❌ " +
+                erro.message;
+
+
+            botao.disabled =
+                false;
+
+
+            botao.innerText =
+                "🤖 Gerar Modelo 3D";
+
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+        Tempo máximo
+    */
+
+    resultado.innerHTML =
+        "⏰ A geração demorou mais do que o esperado. " +
+        "Você pode tentar novamente.";
+
+
+    botao.disabled =
+        false;
+
+
+    botao.innerText =
+        "🤖 Gerar Modelo 3D";
+
+}
+
+
+
+/* =========================================
+   ENCONTRAR URL
+========================================= */
+
+function encontrarUrl(output){
+
+    if(!output){
+
+        return null;
+
+    }
+
+
+    /*
+        Alguns retornos possuem
+        diferentes estruturas.
+    */
+
+
+    if(
+        typeof output ===
+        "string"
+    ){
+
+        return output;
+
+    }
+
+
+    if(
+        output.model
+    ){
+
+        return output.model;
+
+    }
+
+
+    if(
+        output.pbr_model
+    ){
+
+        return output.pbr_model;
+
+    }
+
+
+    if(
+        output.base_model
+    ){
+
+        return output.base_model;
+
+    }
+
+
+    if(
+        output.glb
+    ){
+
+        return output.glb;
+
+    }
+
+
+    if(
+        output.model_url
+    ){
+
+        return output.model_url;
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =========================================
+   ESPERAR
+========================================= */
+
+function esperar(
+    milissegundos
+){
+
+    return new Promise(
+        function(resolve){
+
+            setTimeout(
+                resolve,
+                milissegundos
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================
    HISTÓRICO
-===================================== */
+========================================= */
 
 function atualizarHistorico(){
 
     const area =
-        document.getElementById(
-            "historico"
-        );
+        document
+        .getElementById("historico");
 
-    area.innerHTML = "";
+
+    area.innerHTML =
+        "";
 
 
     historico.forEach(
         function(item){
 
-            area.innerHTML +=
-                "<div class='projeto'>" +
-                item +
-                "</div>";
+            const projeto =
+                document.createElement(
+                    "div"
+                );
+
+
+            projeto.className =
+                "projeto";
+
+
+            projeto.innerText =
+                "🌐 " + item;
+
+
+            area.appendChild(
+                projeto
+            );
 
         }
     );
@@ -501,4 +1112,5 @@ function atualizarHistorico(){
 </script>
 
 </body>
-  </html>
+
+    </html>
